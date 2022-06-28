@@ -19,7 +19,7 @@
 #undef RETSIGVAL
 
 /* Define if you have posix signal routines (sigaction(), et. al.) */
-#undef POSIX_SIGNALS
+#define POSIX_SIGNALS
 
 /* Define if you have BSD4.2 signal routines (sigsetmask(), et. al.) */
 #undef BSD42_SIGNALS
