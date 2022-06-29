@@ -16,7 +16,6 @@ ac_help='
 --{sh,ksh}		Specify whether to build a ksh or a bourne sh
 --env=ENV		Default environment
 --history={no,simple,complex}	History support
---posix			Posix behavior by default
 --silly			[A silly option]
 --swtch			Shell layer (shl(1)) support.  Obsolete?'
 
@@ -47,7 +46,6 @@ locals() {
     --ENV=*)	echo "$1" | sed -e's/^--.../DEFAULT_ENV/' ;;
     --SH)	echo SHELL=SH ;;
     --KSH)	echo SHELL=KSH ;;
-    --POSIX)	echo POSIX=T ;;
     --SILLY)	echo SILLY=T ;;
     --SWTCH)	echo SWTCH=T ;;
     esac
@@ -249,9 +247,10 @@ AC_DEFINE 'RETSIGVAL' '/**/'
 
 AC_SUB 'ac_exe_suffix' ''
 
+AC_DEFINE 'POSIXLY_CORRECT' '1'
+
 test "$SILLY" && AC_DEFINE 'SILLY' '1'
 test "$NO_JOBS" || AC_DEFINE 'JOBS' '1'
-test "$POSIX" && AC_DEFINE 'POSIXLY_CORRECT' '1'
 test "$NO_BRACES" || AC_DEFINE 'BRACE_EXPAND' '1'
 
 if [ "$SHELL" = "SH" ]; then
@@ -259,7 +258,7 @@ if [ "$SHELL" = "SH" ]; then
     AC_SUB 'SHELL_PROG' 'sh'
 else
     AC_DEFINE 'KSH' '1'
-    AC_SUB 'SHELL_PROG' 'ksh'
+    AC_SUB 'SHELL_PROG' 'pdksh'
     test "$NO_VI" || AC_DEFINE 'VI' '1'
     test "$NO_EMACS" || AC_DEFINE 'EMACS' '1'
 fi
@@ -292,7 +291,6 @@ LOGN "vi-mode:        "; test "$NO_VI" && LOG "no" || LOG "yes"
 LOGN "emacs-mode:     "; test "$NO_EMACS" && LOG "no" || LOG "yes"
 LOGN "job control:    "; test "$NO_JOBS" && LOG "no" || LOG "yes"
 LOGN "brace expansion:"; test "$NO_BRACES" && LOG "no" || LOG "yes"
-LOGN "posixly_correct:"; test "$POSIX" && LOG "yes" || LOG "no"
 LOGN "shell layers:   "; test "$SWTCH" && LOG "yes" || LOG "no"
 test "$SILLY" && LOG "silly:          quite so!"
 test "$DEFAULT_PATH" && LOG "default_path:   $DEFAULT_PATH"

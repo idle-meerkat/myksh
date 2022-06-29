@@ -15,7 +15,7 @@ man=$2
 
 case $shell in
  sh) which=0;;
- ksh) which=1;;
+ pdksh) which=1;;
  *)
     echo "$0: bad shell option (must be sh or ksh)" 1>&2
     exit 1
