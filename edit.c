@@ -215,10 +215,6 @@ x_mode(onoff)
 # ifdef VWERASE
 		edchars.werase = cb.c_cc[VWERASE];
 # endif
-# ifdef _CRAY2		/* brain-damaged terminal handler */
-		cb.c_lflag &= ~(ICANON|ECHO);
-		/* rely on print routine to map '\n' to CR,LF */
-# else
 		cb.c_iflag &= ~(INLCR|ICRNL);
 #  ifdef _BSD_SYSV	/* need to force CBREAK instead of RAW (need CRMOD on output) */
 		cb.c_lflag &= ~(ICANON|ECHO);
@@ -242,7 +238,6 @@ x_mode(onoff)
 #  endif /* VDISCARD */
 		cb.c_cc[VTIME] = 0;
 		cb.c_cc[VMIN] = 1;
-# endif	/* _CRAY2 */
 #else
 	/* Assume BSD tty stuff. */
 		edchars.erase = cb.sgttyb.sg_erase;
