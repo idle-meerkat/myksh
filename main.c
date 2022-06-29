@@ -494,6 +494,11 @@ shell(s, toplevel)
 	volatile int interactive = Flag(FTALKING) && toplevel;
 	int i;
 
+	if (interactive) {
+		include(substitute("/etc/kshrc", 0), 0, (char **) 0, 1);
+		include(substitute("$HOME/.kshrc", 0), 0, (char **) 0, 1);
+	}
+
 	newenv(E_PARSE);
 	if (interactive)
 		really_exit = 0;
