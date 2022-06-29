@@ -255,8 +255,9 @@ static	struct x_defbindings const x_defbindings[] = {
 #else
 	{ XFUNC_transpose,		0, CTRL('T') },
 #endif
-	{ XFUNC_complete,		1, CTRL('[') },
-        { XFUNC_comp_list,		1,	'='  },
+	{ XFUNC_comp_list,		0,      '\t' },
+	{ XFUNC_comp_list,		1, CTRL('[') },
+        { XFUNC_complete,		1,	'='  },
 	{ XFUNC_enumerate,		1,	'?'  },
         { XFUNC_expand,			1,	'*'  },
 	{ XFUNC_comp_file,		1, CTRL('X') },
