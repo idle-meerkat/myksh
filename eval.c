@@ -1044,15 +1044,7 @@ globit(xs, xpp, sp, wp, check)
 				*xp = '\0';
 			}
 		}
-#ifdef OS2 /* Done this way to avoid bug in gcc 2.7.2... */
-    /* Ugly kludge required for command
-     * completion - see how search_access()
-     * is implemented for OS/2...
-     */
-# define KLUDGE_VAL	4
-#else /* OS2 */
 # define KLUDGE_VAL	0
-#endif /* OS2 */
 		XPput(*wp, str_nsave(Xstring(*xs, xp), Xlength(*xs, xp)
 			+ KLUDGE_VAL, ATEMP));
 		return;
@@ -1126,49 +1118,6 @@ globit(xs, xpp, sp, wp, check)
 		*--np = odirsep;
 }
 
-#if 0
-/* Check if p contains something that needs globbing; if it does, 0 is
- * returned; if not, p is copied into xs/xp after stripping any MAGICs
- */
-static int	copy_non_glob ARGS((XString *xs, char **xpp, char *p));
-static int
-copy_non_glob(xs, xpp, p)
-	XString *xs;
-	char **xpp;
-	char *p;
-{
-	char *xp;
-	int len = strlen(p);
-
-	XcheckN(*xs, *xpp, len);
-	xp = *xpp;
-	for (; *p; p++) {
-		if (ISMAGIC(*p)) {
-			int c = *++p;
-
-			if (c == '*' || c == '?')
-				return 0;
-			if (*p == '[') {
-				char *q = p + 1;
-
-				if (ISMAGIC(*q) && q[1] == NOT)
-					q += 2;
-				if (ISMAGIC(*q) && q[1] == ']')
-					q += 2;
-				for (; *q; q++)
-					if (ISMAGIC(*q) && *++q == ']')
-						return 0;
-				/* pass a literal [ through */
-			}
-			/* must be a MAGIC-MAGIC, or MAGIC-!, MAGIC--, etc. */
-		}
-		*xp++ = *p;
-	}
-	*xp = '\0';
-	*xpp = xp;
-	return 1;
-}
-#endif /* 0 */
 
 /* remove MAGIC from string */
 char *
@@ -1277,10 +1226,6 @@ homedir(name)
 
 	ap = tenter(&homedirs, name, hash(name));
 	if (!(ap->flag & ISSET)) {
-#ifdef OS2
-		/* No usernames in OS2 - punt */
-		return NULL;
-#else /* OS2 */
 		struct passwd *pw;
 
 		pw = getpwnam(name);
@@ -1288,7 +1233,6 @@ homedir(name)
 			return NULL;
 		ap->val.s = str_save(pw->pw_dir, APERM);
 		ap->flag |= DEFINED|ISSET|ALLOC;
-#endif /* OS2 */
 	}
 	return ap->val.s;
 }

@@ -22,11 +22,7 @@
 # ifdef EASY_HISTORY
 
 #  ifndef HISTFILE
-#   ifdef OS2
-#    define HISTFILE "history.ksh"
-#   else /* OS2 */
 #    define HISTFILE ".pdksh_history"
-#   endif /* OS2 */
 #  endif
 
 # else
@@ -672,19 +668,8 @@ hist_init(s)
 	hist_source = s;
 
 	if ((f = str_val(global("HISTFILE"))) == NULL || *f == '\0') {
-# if 1 /* Don't use history file unless the user asks for it */
 		hname = NULL;
 		return;
-# else
-		char *home = str_val(global("HOME"));
-		int len;
-
-		if (home == NULL)
-			home = null;
-		f = HISTFILE;
-		hname = alloc(len = strlen(home) + strlen(f) + 2, APERM);
-		shf_snprintf(hname, len, "%s/%s", home, f);
-# endif
 	} else
 		hname = str_save(f, APERM);
 

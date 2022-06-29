@@ -62,10 +62,6 @@ TESTFILES = tests/README tests/th tests/th-sh tests/alias.t tests/arith.t \
 	tests/integer.t tests/lineno.t tests/read.t tests/regress.t \
 	tests/syntax.t tests/unclass1.t tests/unclass2.t \
 	tests/version.t 
-# OS2FILES also disted, but handled differently
-OS2FILES = os2/Makefile os2/config.h os2/config.status os2/configure.cmd \
-	os2/emacs.out os2/kshrc.ksh os2/make.sed os2/os2.c os2/os2siglist.out \
-	os2/README.os2 os2/NEWS.os2 os2/os2bugs os2/th.cmd os2/config.cache
 
 all: $(SHELL_PROG)$(exe_suffix) $(SHELL_PROG).1
 

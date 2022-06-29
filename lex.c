@@ -212,12 +212,6 @@ yylex(cf)
 			switch (c) {
 			  case '\\':
 				c = getsc();
-#ifdef OS2
-				if (isalnum(c)) {
-					*wp++ = CHAR, *wp++ = '\\';
-					*wp++ = CHAR, *wp++ = c;
-				} else 
-#endif
 				if (c) /* trailing \ is lost */
 					*wp++ = QCHAR, *wp++ = c;
 				break;
@@ -1165,40 +1159,6 @@ pprompt(cp, ntruncate)
 	const char *cp;
 	int ntruncate;
 {
-#if 0
-	char nbuf[32];
-	int c;
-
-	while (*cp != 0) {
-		if (*cp != '!')
-			c = *cp++;
-		else if (*++cp == '!')
-			c = *cp++;
-		else {
-			int len;
-			char *p;
-
-			shf_snprintf(p = nbuf, sizeof(nbuf), "%d",
-				source->line + 1);
-			len = strlen(nbuf);
-			if (ntruncate) {
-				if (ntruncate >= len) {
-					ntruncate -= len;
-					continue;
-				}
-				p += ntruncate;
-				len -= ntruncate;
-				ntruncate = 0;
-			}
-			shf_write(p, len, shl_out);
-			continue;
-		}
-		if (ntruncate)
-			--ntruncate;
-		else
-			shf_putc(c, shl_out);
-	}
-#endif /* 0 */
 	shf_puts(cp + ntruncate, shl_out);
 	shf_flush(shl_out);
 }

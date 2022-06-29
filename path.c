@@ -156,10 +156,10 @@ simplify_path(path)
 
 	if ((isrooted = ISROOTEDPATH(path)))
 		very_start++;
-#if defined (OS2) || defined (__CYGWIN__)
+#if defined (__CYGWIN__)
 	if (path[0] && path[1] == ':')	/* skip a: */
 		very_start += 2;
-#endif /* OS2 || __CYGWIN__ */
+#endif /* __CYGWIN__ */
 
 	/* Before			After
 	 *  /foo/			/foo

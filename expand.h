@@ -5,23 +5,6 @@
 
 #define X_EXTRA		8	/* this many extra bytes in X string */
 
-#if 0				/* Usage */
-	XString xs;
-	char *xp;
-
-	Xinit(xs, xp, 128, ATEMP); /* allocate initial string */
-	while ((c = generate()) {
-		Xcheck(xs, xp);	/* expand string if neccessary */
-		Xput(xs, xp, c); /* add character */
-	}
-	return Xclose(xs, xp);	/* resize string */
-/*
- * NOTE:
- *     The Xcheck and Xinit macros have a magic + X_EXTRA in the lengths.
- *     This is so that you can put up to X_EXTRA characters in a XString
- *     before calling Xcheck. (See yylex in lex.c)
- */
-#endif /* 0 */
 
 typedef struct XString {
 	char   *end, *beg;	/* end, begin of string */

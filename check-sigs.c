@@ -36,9 +36,6 @@ struct signal_info siginfo[] = {
 };
 
 int		usage();
-#if 0
-RETSIGTYPE	sig_catcher();
-#endif /* 0 */
 char		*signal_name();
 #ifndef HAVE_STRERROR
 char		*strerror(int);
@@ -133,24 +130,6 @@ main(argc, argv)
 		}
 	}
 
-#if 0	/* code assumes BSD signals - not worth posixizing */
-	if (wait_forever) {
-		printf("pid is %d\n", getpid());
-		sigsetmask(-1L);
-		for (i = 0; i < NSIG; i++)
-			(void) signal(i, sig_catcher);
-		while (1) {
-			sigpause(0L);
-			for (i = 1; i < NSIG; i++)
-				if (caught_sigs & sigmask(i))
-					printf("received signal %d - %s\n",
-						i,
-						(s = signal_name(i)) ? s
-								     : "");
-			caught_sigs = 0L;
-		}
-	}
-#endif
 
 	return 0;
 }
@@ -171,15 +150,6 @@ usage(verbose)
 	return 0;
 }
 
-#if 0
-RETSIGTYPE
-sig_catcher(sig)
-	int sig;
-{
-	caught_sigs |= sigmask(sig);
-	return RETSIGVAL;
-}
-#endif /* 0 */
 
 
 

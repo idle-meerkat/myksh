@@ -114,12 +114,8 @@ struct block {
 	struct	table vars;	/* local variables */
 	struct	table funs;	/* local functions */
 	Getopt	getopts_state;
-#if 1
 	char *	error;		/* error handler */
 	char *	exit;		/* exit handler */
-#else
-	Trap	error, exit;
-#endif
 	struct	block *next;	/* enclosing block */
 };
 

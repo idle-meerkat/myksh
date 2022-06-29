@@ -192,12 +192,10 @@ v_evaluate(vp, expr, error_ok)
 	}
 
 	token(es);
-#if 1 /* ifdef-out to disallow empty expressions to be treated as 0 */
 	if (es->tok == END) {
 		es->tok = LIT;
 		es->val = tempvar();
 	}
-#endif /* 0 */
 	v = intvar(es, evalexpr(es, MAX_PREC));
 
 	if (es->tok != END)

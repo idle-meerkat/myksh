@@ -51,17 +51,8 @@ struct x_defbindings {
 #define	is_cfs(c)	(c == ' ' || c == '\t' || c == '"' || c == '\'')
 #define	is_mfs(c)	(!(isalnum(c) || c == '_' || c == '$'))  /* Separator for motion */
 
-#ifdef OS2
-  /* Deal with 8 bit chars & an extra prefix for function key (these two
-   * changes increase memory usage from 9,216 bytes to 24,416 bytes...)
-   */
-# define CHARMASK	0xFF		/* 8-bit ASCII character mask */
-# define X_NTABS	4		/* normal, meta1, meta2, meta3 */
-static int	x_prefix3 = 0xE0;
-#else /* OS2 */
 # define CHARMASK	0xFF		/* 8-bit character mask */
 # define X_NTABS	3		/* normal, meta1, meta2 */
-#endif /* OS2 */
 #define X_TABSZ		(CHARMASK+1)	/* size of keydef tables etc */
 
 /* Arguments for do_complete()
@@ -220,11 +211,7 @@ static const struct x_ftab x_ftab[] = {
 #else
 	{ 0, 0, 0 },
 #endif
-#ifdef OS2
-	{ x_meta3,		"prefix-3",			XF_PREFIX },
-#else
 	{ 0, 0, 0 },
-#endif
 /* @END-FUNC-TAB@ */
     };
 
@@ -301,13 +288,6 @@ static	struct x_defbindings const x_defbindings[] = {
         { XFUNC_fold_lower,		1,	'l'  },
         { XFUNC_fold_capitialize,	1,	'C'  },
         { XFUNC_fold_capitialize,	1,	'c'  },
-#ifdef OS2
-	{ XFUNC_meta3,			0,	0xE0 },
-	{ XFUNC_mv_back,		3,	'K'  },
-	{ XFUNC_mv_forw,		3,	'M'  },
-	{ XFUNC_next_com,		3,	'P'  },
-	{ XFUNC_prev_com,		3,	'H'  },
-#endif /* OS2 */
 	/* These for ansi arrow keys: arguablely shouldn't be here by
 	 * default, but its simpler/faster/smaller than using termcap
 	 * entries.
@@ -1166,15 +1146,6 @@ x_meta2(c)
 	return KSTD;
 }
 
-#ifdef OS2
-static int
-x_meta3(c)
-	int c;
-{
-	x_curprefix = 3;
-	return KSTD;
-}
-#endif /* OS2 */
 
 static int
 x_kill(c)
@@ -1312,11 +1283,6 @@ x_mapin(cp)
 		/* XXX -- should handle \^ escape? */
 		if (*cp == '^')  {
 			cp++;
-#ifdef OS2
-			if (*cp == '0')	/* To define function keys */
-				*op++ = 0xE0;
-			else
-#endif /* OS2 */
 			if (*cp >= '?')	/* includes '?'; ASCII */
 				*op++ = CTRL(*cp);
 			else  {
@@ -1339,12 +1305,6 @@ x_mapout(c)
 	static char buf[8];
 	register char *p = buf;
 
-#ifdef OS2
-	if (c == 0xE0) {
-		*p++ = '^';
-		*p++ = '0';
-	} else
-#endif /* OS2 */
 	if (iscntrl(c))  {
 		*p++ = '^';
 		*p++ = UNCTRL(c);
@@ -1362,10 +1322,6 @@ x_print(prefix, key)
 		shprintf("%s", x_mapout(x_prefix1));
 	if (prefix == 2)
 		shprintf("%s", x_mapout(x_prefix2));
-#ifdef OS2
-	if (prefix == 3)
-		shprintf("%s", x_mapout(x_prefix3));
-#endif /* OS2 */
 	shprintf("%s = ", x_mapout(key));
 	if (x_tab[prefix][key] != XFUNC_ins_string)
 		shprintf("%s\n", x_ftab[x_tab[prefix][key]].xf_name);
@@ -1418,10 +1374,6 @@ x_bind(a1, a2, macro, list)
 			prefix = 1;
 		else if (x_tab[prefix][key] == XFUNC_meta2)
 			prefix = 2;
-#ifdef OS2
-		else if (x_tab[prefix][key] == XFUNC_meta3)
-			prefix = 3;
-#endif /* OS2 */
 		else
 			break;
 	}
@@ -1442,12 +1394,6 @@ x_bind(a1, a2, macro, list)
 			bi_errorf("%s: no such function", a2);
 			return 1;
 		}
-#if 0		/* This breaks the bind commands that map arrow keys */
-		if (f == XFUNC_meta1)
-			x_prefix1 = key;
-		if (f == XFUNC_meta2)
-			x_prefix2 = key;
-#endif /* 0 */
 	} else {
 		f = XFUNC_ins_string;
 		m2 = x_mapin(a2);
