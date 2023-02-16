@@ -88,9 +88,7 @@ void	histsave	ARGS((int lno, const char *cmd, int dowrite));
 int 	c_fc	 	ARGS((register char **wp));
 void	sethistsize	ARGS((int n));
 void	sethistfile	ARGS((const char *name));
-# ifdef EASY_HISTORY
 void 	histappend	ARGS((const char *cmd, int nl_separate));
-# endif
 char **	histpos	 	ARGS((void));
 int 	histN	 	ARGS((void));
 int 	histnum	 	ARGS((int n));

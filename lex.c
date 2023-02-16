@@ -1080,11 +1080,9 @@ getsc_line(s)
 			while (*p && ctype(*p, C_IFS) && ctype(*p, C_IFSWS))
 				p++;
 		if (*p) {
-# ifdef EASY_HISTORY
 			if (cur_prompt == PS2)
 				histappend(Xstring(s->xs, xp), 1);
 			else
-# endif /* EASY_HISTORY */
 			{
 				s->line++;
 				histsave(s->line, s->str, 1);

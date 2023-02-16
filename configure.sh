@@ -37,10 +37,6 @@ locals() {
     --HISTORY=*)history=`echo $K | sed -e '/^--HISTORY=//'`
 		if [ "$history" = "NO" ]; then
 		    echo HISTORY=$history
-		elif [ "$history" = "SIMPLE" ]; then
-		    echo HISTORY=$history
-		elif [ "$history" = "COMPLEX" ]; then
-		    echo HISTORY=$history
 		fi ;;
     --PATH=*)   echo "$1" | sed -e's/^--..../DEFAULT_PATH/' ;;
     --ENV=*)	echo "$1" | sed -e's/^--.../DEFAULT_ENV/' ;;
@@ -54,7 +50,7 @@ locals() {
 VERSION=`grep -i VERSION: IAFA-PACKAGE | awk '{print $2}'`
 TARGET=pdksh
 SHELL=KSH
-HISTORY=COMPLEX
+HISTORY=YES
 
 . ./configure.inc
 
@@ -274,11 +270,6 @@ AC_DEFINE 'DEFAULT_PATH' '"'${DEFAULT_PATH:-/bin:/usr/bin:/usr/local/bin}'"'
 
 if [ "$HISTORY" != "NO" ]; then
     AC_DEFINE 'HISTORY' '1'
-    if [ "$HISTORY" = "COMPLEX" ] ;then
-	AC_DEFINE 'COMPLEX_HISTORY' '1'
-    else
-	AC_DEFINE 'EASY_HISTORY' '1'
-    fi
 fi
 
 AC_TEXT '#include "conf-end.h"'
@@ -297,7 +288,6 @@ test "$DEFAULT_PATH" && LOG "default_path:   $DEFAULT_PATH"
 test "$DEFAULT_ENV"  && LOG "default_env:    $DEFAULT_ENV"
 case "$HISTORY" in
 NO)      LOG "history:        disabled" ;;
-COMPLEX) LOG "history:        complex" ;;
 *)       LOG "history:        simple" ;;
 esac
 LOG

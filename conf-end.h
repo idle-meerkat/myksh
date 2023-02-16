@@ -15,15 +15,6 @@
 # define HISTORY
 #endif /* EDIT */
 
-/*
- * if you don't have mmap() you can't use Peter Collinson's history
- * mechanism.  If that is the case, then define EASY_HISTORY
- */
-#if defined(HISTORY) && (!defined(COMPLEX_HISTORY) || !defined(HAVE_MMAP) || !defined(HAVE_FLOCK))
-# undef COMPLEX_HISTORY
-# define EASY_HISTORY			/* sjg's trivial history file */
-#endif
-
 /* Can we safely catch sigchld and wait for processes? */
 #if (defined(HAVE_WAITPID) || defined(HAVE_WAIT3)) \
     && (defined(POSIX_SIGNALS) || defined(BSD42_SIGNALS))
