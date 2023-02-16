@@ -1813,8 +1813,15 @@ x_adjust()
    */
   if ((xbp = xcp - (x_displen / 2)) < xbuf)
     xbp = xbuf;
+
   xlp_valid = FALSE;
-  x_redraw(xx_cols);
+  if (xcp < xep) {
+    x_redraw(xx_cols);
+  } else {
+    xbp = xcp;
+    x_redraw(-1);
+  }
+
   x_flush();
 }
 
