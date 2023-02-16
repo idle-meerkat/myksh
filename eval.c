@@ -1128,7 +1128,7 @@ debunk(dp, sp)
 	char *d, *s;
 
 	if ((s = strchr(sp, MAGIC))) {
-		memcpy(dp, sp, s - sp);
+		memmove(dp, sp, s - sp);
 		for (d = dp + (s - sp); *s; s++)
 			if (!ISMAGIC(*s) || !(*++s & 0x80)
 			    || !strchr("*+?@! ", *s & 0x7f))
